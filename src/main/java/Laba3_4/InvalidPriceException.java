@@ -1,4 +1,4 @@
-package Laba3;
+package Laba3_4;
 
 // Исключение для ошибок ввода цены
 class InvalidPriceException extends Exception {

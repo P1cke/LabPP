@@ -1,17 +1,18 @@
-package Laba3;
+package Laba3_4;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.Objects;
 
-// Интерфейс
-interface Product {
+interface Product extends Serializable {
     String[] getProducts();
     String getName();
     int getPrice();
     int calculateTotalPrice();
+    void output(OutputStream out);
 }
 
-class ProductItem implements Product {
+class ProductItem implements Product, Serializable {
     private String[] products;
     private String name;
     private int price;
@@ -70,5 +71,22 @@ class ProductItem implements Product {
         result = 31 * result + Arrays.hashCode(products);
         return result;
     }
-}
 
+    @Override
+    public void output(OutputStream out) {
+        try (ObjectOutputStream objectOut = new ObjectOutputStream(out)) {
+            objectOut.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ProductItem deserialize(InputStream in) {
+        try (ObjectInputStream objectIn = new ObjectInputStream(in)) {
+            return (ProductItem) objectIn.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
